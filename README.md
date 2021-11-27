@@ -14,10 +14,10 @@ _You will need to install the next libraries to run this project. For truffle wi
 npm install -g truffle
 ```
 ```
-npm i @openzeppelin/contracts
+yarn add @openzeppelin/contracts
 ```
 ```
-npm i @openzeppelin/test-helpers
+yarn add @openzeppelin/test-helpers
 ```
 
 ### Installing 🔧
@@ -26,7 +26,7 @@ _You can run a simple command to install everything_
 
 
 ```
-npm i
+yarn 
 ```
 
 ## Testings ⚙️
