@@ -194,8 +194,8 @@ contract Dex {
                     orders[i].trader
                 ][DAI].add(matched.mul(orders[i].price));
             }
-            nextTradeId++;
-            i++;
+            nextTradeId = nextTradeId.add(1);
+            i = i.add(1);
         }
 
         i = 0;
@@ -204,7 +204,7 @@ contract Dex {
                 orders[j] = orders[j + 1];
             }
             orders.pop();
-            i++;
+            i = i.add(1);
         }
     }
 
