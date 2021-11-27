@@ -4,7 +4,7 @@ This project is to learn the basics from Solidity, truffle and integration with 
 
 ## Starting 🚀
 
-_It was coded using **solidity 8.0**._
+_It was coded using **solidity 8.9**._
 
 ### Before to start 📋
 
