@@ -64,139 +64,139 @@ contract("Dex", (accounts) => {
         );
     });
 
+    // DEPOSIT TESTS ---------------------------------------------------------------------------
+    it("should deposit tokens", async () => {
+        await dex.deposit(regularAmount, DAI, { from: trader1 });
+        const balance = await dex.traderBalances(trader1, DAI);
+        assert(balance.toString() === regularAmount);
+    });
+
+    it("should NOT deposit tokens if token does not exist", async () => {
+        await expectRevert(
+            dex.deposit(regularAmount, fakeToken, {
+                from: trader1,
+            }),
+            inputError
+        );
+    });
     // // DEPOSIT TESTS ---------------------------------------------------------------------------
-    // it("should deposit tokens", async () => {
-    //     await dex.deposit(regularAmount, DAI, { from: trader1 });
-    //     const balance = await dex.traderBalances(trader1, DAI);
-    //     assert(balance.toString() === regularAmount);
-    // });
 
-    // it("should NOT deposit tokens if token does not exist", async () => {
-    //     await expectRevert(
-    //         dex.deposit(regularAmount, fakeToken, {
-    //             from: trader1,
-    //         }),
-    //         inputError
-    //     );
-    // });
-    // // // DEPOSIT TESTS ---------------------------------------------------------------------------
-
-    // // // WITHDRAW TESTS ---------------------------------------------------------------------------
-    // it("should withdraw tokens", async () => {
-    //     await dex.deposit(regularAmount, DAI, { from: trader1 });
-
-    //     await dex.withdraw(regularAmount, DAI, { from: trader1 });
-    //     const [balanceDex, balanceDai] = await Promise.all([
-    //         dex.traderBalances(trader1, DAI),
-    //         dai.balanceOf(trader1),
-    //     ]);
-    //     assert(balanceDex.isZero());
-    //     assert(balanceDai.toString() === bigAmount);
-    // });
-
-    // it("should NOT withdraw tokens if token does not exist", async () => {
-    //     await expectRevert(
-    //         dex.withdraw(regularAmount, fakeToken, { from: trader1 }),
-    //         inputError
-    //     );
-    // });
-
-    // it("should NOT withdraw tokens if balance is too low", async () => {
-    //     await dex.deposit(regularAmount, DAI, { from: trader1 });
-
-    //     await expectRevert(
-    //         dex.withdraw(bigAmount, DAI, { from: trader1 }),
-    //         balanceError
-    //     );
-    // });
     // // WITHDRAW TESTS ---------------------------------------------------------------------------
+    it("should withdraw tokens", async () => {
+        await dex.deposit(regularAmount, DAI, { from: trader1 });
 
-    // // CREATE LIMIT ORDER TESTS -------------------------------------------------------------
-    // it("should create limit order", async () => {
-    //     // Deposit and Created First Order for trader1
-    //     await dex.deposit(regularAmount, DAI, { from: trader1 });
-    //     await dex.createLimitOrder(REP, smallAmount, 10, SIDE.BUY, {
-    //         from: trader1,
-    //     });
+        await dex.withdraw(regularAmount, DAI, { from: trader1 });
+        const [balanceDex, balanceDai] = await Promise.all([
+            dex.traderBalances(trader1, DAI),
+            dai.balanceOf(trader1),
+        ]);
+        assert(balanceDex.isZero());
+        assert(balanceDai.toString() === bigAmount);
+    });
 
-    //     // Check the orders
-    //     let buyOrders = await dex.getOrders(REP, SIDE.BUY);
-    //     let sellOrders = await dex.getOrders(REP, SIDE.SELL);
-    //     assert(sellOrders.length === 0);
-    //     assert(buyOrders.length === 1);
-    //     assert(buyOrders[0].trader === trader1);
-    //     assert(buyOrders[0].ticker === web3.utils.padRight(REP, 64));
-    //     assert(buyOrders[0].price === "10");
-    //     assert(buyOrders[0].amount === smallAmount);
+    it("should NOT withdraw tokens if token does not exist", async () => {
+        await expectRevert(
+            dex.withdraw(regularAmount, fakeToken, { from: trader1 }),
+            inputError
+        );
+    });
 
-    //     // Deposit and Created First Order for trader2
-    //     await dex.deposit(douebleRegularAmount, DAI, { from: trader2 });
-    //     await dex.createLimitOrder(REP, smallAmount, 11, SIDE.BUY, {
-    //         from: trader2,
-    //     });
+    it("should NOT withdraw tokens if balance is too low", async () => {
+        await dex.deposit(regularAmount, DAI, { from: trader1 });
 
-    //     // Check the orders for second time
-    //     buyOrders = await dex.getOrders(REP, SIDE.BUY);
-    //     sellOrders = await dex.getOrders(REP, SIDE.SELL);
-    //     assert(sellOrders.length === 0);
-    //     assert(buyOrders.length === 2);
-    //     assert(buyOrders[0].trader === trader2);
-    //     assert(buyOrders[1].trader === trader1);
+        await expectRevert(
+            dex.withdraw(bigAmount, DAI, { from: trader1 }),
+            balanceError
+        );
+    });
+    // WITHDRAW TESTS ---------------------------------------------------------------------------
 
-    //     // Created Second Order for trader2
-    //     await dex.createLimitOrder(REP, smallAmount, 9, SIDE.BUY, {
-    //         from: trader2,
-    //     });
+    // CREATE LIMIT ORDER TESTS -------------------------------------------------------------
+    it("should create limit order", async () => {
+        // Deposit and Created First Order for trader1
+        await dex.deposit(regularAmount, DAI, { from: trader1 });
+        await dex.createLimitOrder(REP, smallAmount, 10, SIDE.BUY, {
+            from: trader1,
+        });
 
-    //     // Check the orders for third time
-    //     buyOrders = await dex.getOrders(REP, SIDE.BUY);
-    //     sellOrders = await dex.getOrders(REP, SIDE.SELL);
-    //     assert(sellOrders.length === 0);
-    //     assert(buyOrders.length === 3);
-    //     assert(buyOrders[0].trader === trader2);
-    //     assert(buyOrders[1].trader === trader1);
-    //     assert(buyOrders[2].trader === trader2);
-    //     assert(buyOrders[2].price === "9");
-    // });
+        // Check the orders
+        let buyOrders = await dex.getOrders(REP, SIDE.BUY);
+        let sellOrders = await dex.getOrders(REP, SIDE.SELL);
+        assert(sellOrders.length === 0);
+        assert(buyOrders.length === 1);
+        assert(buyOrders[0].trader === trader1);
+        assert(buyOrders[0].ticker === web3.utils.padRight(REP, 64));
+        assert(buyOrders[0].price === "10");
+        assert(buyOrders[0].amount === smallAmount);
 
-    // it("Should NOT create limit order if token does not exist", async () => {
-    //     await expectRevert(
-    //         dex.createLimitOrder(fakeToken, bigAmount, 10, SIDE.BUY, {
-    //             from: trader1,
-    //         }),
-    //         inputError
-    //     );
-    // });
+        // Deposit and Created First Order for trader2
+        await dex.deposit(douebleRegularAmount, DAI, { from: trader2 });
+        await dex.createLimitOrder(REP, smallAmount, 11, SIDE.BUY, {
+            from: trader2,
+        });
 
-    // it("Should NOT create limit order if token does is DAI", async () => {
-    //     await expectRevert(
-    //         dex.createLimitOrder(DAI, bigAmount, 10, SIDE.BUY, {
-    //             from: trader1,
-    //         }),
-    //         DAIError
-    //     );
-    // });
+        // Check the orders for second time
+        buyOrders = await dex.getOrders(REP, SIDE.BUY);
+        sellOrders = await dex.getOrders(REP, SIDE.SELL);
+        assert(sellOrders.length === 0);
+        assert(buyOrders.length === 2);
+        assert(buyOrders[0].trader === trader2);
+        assert(buyOrders[1].trader === trader1);
 
-    // it("Should NOT create limit order if token balance is too low", async () => {
-    //     await dex.deposit(regularAmount, REP, { from: trader1 });
-    //     await expectRevert(
-    //         dex.createLimitOrder(REP, douebleRegularAmount, 10, SIDE.SELL, {
-    //             from: trader1,
-    //         }),
-    //         `token ${balanceError}`
-    //     );
-    // });
+        // Created Second Order for trader2
+        await dex.createLimitOrder(REP, smallAmount, 9, SIDE.BUY, {
+            from: trader2,
+        });
 
-    // it("should NOT create limit order if dai balance too low", async () => {
-    //     await dex.deposit(regularAmount, DAI, { from: trader1 });
-    //     await expectRevert(
-    //         dex.createLimitOrder(REP, douebleRegularAmount, 200, SIDE.BUY, {
-    //             from: trader1,
-    //         }),
-    //         `dai ${balanceError}`
-    //     );
-    // });
-    // // CREATE LIMIT ORDER TESTS -------------------------------------------------------------
+        // Check the orders for third time
+        buyOrders = await dex.getOrders(REP, SIDE.BUY);
+        sellOrders = await dex.getOrders(REP, SIDE.SELL);
+        assert(sellOrders.length === 0);
+        assert(buyOrders.length === 3);
+        assert(buyOrders[0].trader === trader2);
+        assert(buyOrders[1].trader === trader1);
+        assert(buyOrders[2].trader === trader2);
+        assert(buyOrders[2].price === "9");
+    });
+
+    it("Should NOT create limit order if token does not exist", async () => {
+        await expectRevert(
+            dex.createLimitOrder(fakeToken, bigAmount, 10, SIDE.BUY, {
+                from: trader1,
+            }),
+            inputError
+        );
+    });
+
+    it("Should NOT create limit order if token does is DAI", async () => {
+        await expectRevert(
+            dex.createLimitOrder(DAI, bigAmount, 10, SIDE.BUY, {
+                from: trader1,
+            }),
+            DAIError
+        );
+    });
+
+    it("Should NOT create limit order if token balance is too low", async () => {
+        await dex.deposit(regularAmount, REP, { from: trader1 });
+        await expectRevert(
+            dex.createLimitOrder(REP, douebleRegularAmount, 10, SIDE.SELL, {
+                from: trader1,
+            }),
+            `token ${balanceError}`
+        );
+    });
+
+    it("should NOT create limit order if dai balance too low", async () => {
+        await dex.deposit(regularAmount, DAI, { from: trader1 });
+        await expectRevert(
+            dex.createLimitOrder(REP, douebleRegularAmount, 200, SIDE.BUY, {
+                from: trader1,
+            }),
+            `dai ${balanceError}`
+        );
+    });
+    // CREATE LIMIT ORDER TESTS -------------------------------------------------------------
 
     // CREATE MARKET ORDER TESTS -------------------------------------------------------------
     it("should create market order & match against existint limit order", async () => {
