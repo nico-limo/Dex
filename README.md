@@ -4,7 +4,28 @@ _This project is a decentralized exchange created for trade and create limit ord
 
 ## Starting 🚀
 
-_To run this project locally, you need to have npm and truffle installed._
+_To run corretly this project locally, you need to have npm and truffle installed. Also you will need have installed metamask extension in your browser and add a custome rpc (truffle develop)._
+
+The new RPC URL it will be [http://127.0.0.1:9545](https://www.trufflesuite.com/docs/truffle/getting-started/truffle-with-metamask) 
+The chain Id it will be _1337_
+
+## Running the project 📦
+
+_To run this project locally, you will need to follow the next steps._
+
+Inside Dex, you wil run in your terminal the next commands:
+```
+truffle develop
+```
+And inside the truffle terminal
+```
+migrate --reset
+```
+
+Then inside client you only need to run
+```
+npm start
+```
 
 ### Pre-requirements 📋
 
