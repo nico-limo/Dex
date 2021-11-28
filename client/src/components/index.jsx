@@ -1,2 +1,2 @@
-export {default as App} from "./App";
-export {default as Footer} from "./Footer";
+export {default as LoadingContainer} from "./LoadingContainer";
+export {default as Dropdown} from "./Dropdown";
