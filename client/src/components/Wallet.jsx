@@ -13,7 +13,7 @@ const Wallet = ({ deposit, withdraw, user }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        if (direction === DIRECTION.deposit) {
+        if (direction === DIRECTION.DEPOSIT) {
             deposit(amount);
         } else {
             withdraw(amount);
