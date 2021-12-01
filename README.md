@@ -9,6 +9,8 @@ _To run corretly this project locally, you need to have npm and truffle installe
 The new RPC URL it will be [http://127.0.0.1:9545](https://www.trufflesuite.com/docs/truffle/getting-started/truffle-with-metamask) 
 The chain Id it will be _1337_
 
+_Also, you will need to copy the Mnemonic code into your metamask to use the fake accounts.
+
 ## Running the project 📦
 
 _To run this project locally, you will need to follow the next steps._

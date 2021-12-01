@@ -29,7 +29,7 @@ const LoadingContainer = () => {
 
     if (!isReady()) return <div>Loading...</div>;
 
-    return <App web3={web3} account={accounts} contracts={contracts} />;
+    return <App web3={web3} accounts={accounts} contracts={contracts} />;
 };
 
 export default LoadingContainer;

@@ -25,7 +25,7 @@ const Dropdown = ({ onSelect, activeItem, items }) => {
                                 className={`dropdown-item ${
                                     activeItem.value ? "active" : null
                                 }`}
-                                href="#"
+                                href="/#"
                                 onClick={(e) => selectItem(e, item.value)}
                             >
                                 {item.label}
