@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-
-const DIRECTION = {
-    WITHDRAW: "WITHDRAW",
-    DEPOSIT: "DEPOSIT",
-};
+import {DIRECTION} from "../utils/constants";
 
 const Wallet = ({ deposit, withdraw, user }) => {
     const [direction, setDirection] = useState(DIRECTION.DEPOSIT);
